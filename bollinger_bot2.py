@@ -1,4 +1,4 @@
-import smtplib
+
 import time
 import datetime
 import numpy as np
@@ -7,10 +7,6 @@ import requests
 import json as jsn
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
-import mimetypes
-from email.mime.multipart import MIMEMultipart
-from email.mime.application import MIMEApplication
-from email.mime.text import MIMEText
 
 
 
@@ -29,40 +25,10 @@ def moving_average(x, N):
         #return np.convolve(x, np.ones((N,)) / N)[(N - 1):]
         return np.convolve(x, np.ones((N,)) / N, mode='valid')
 
-def extract_mail_data():
-    addressee = []
-    credentials = {}
-    with open('Usernames.txt', 'r') as f:
-        for line in f:
-            user, pwd = line.strip().split(':')
-            credentials[user] = pwd
-            break
-        for line in f:
-            user, pwd = line.strip().split(':')
-            addressee.append(user)
-            break
-    return credentials, addressee
 
 
-def send_mail(username, credential, addressee, msg_sub, msg_body):
-    path = 'fig_1.png'
-    msg = MIMEMultipart()
-    msg['Subject'] = msg_sub
-    msg['From'] = username
-    msg['To'] = ','.join(addressee)
-    text = MIMEText(msg_body)
-    text.add_header("Content-Disposition", "inline")
-    msg.attach(text)
 
-    attach = MIMEApplication(open(path, 'rb').read())
-    attach.add_header('Content-Disposition', 'attachment', filename='fig_1.png')
-    msg.attach(attach)
 
-    smtpObj = smtplib.SMTP('smtp.gmail.com', 587)               # connecting to gmail
-    smtpObj.starttls()                                          # TLS(Transport Layer Security) on
-    smtpObj.login(username, credential)
-    smtpObj.sendmail(username, addressee, msg.as_string())
-    smtpObj.quit()
 
 
 def main():
