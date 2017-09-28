@@ -7,22 +7,23 @@ from email.mime.text import MIMEText
 
 class bb_mail:
 
-    addressee = []
-    credentials = {}
+    def __init__(self):
+        self.addressee = []
+        self.credentials = {}
 
     def extract_mail_data(self, pathfile):
-        addressee = []
-        credentials = {}
+        self.addressee = []
+        self.credentials = {}
         with open(pathfile, 'r') as f:
             for line in f:
                 user, pwd = line.strip().split(':')
-                credentials[user] = pwd
+                self.credentials[user] = pwd
                 break
             for line in f:
                 user, pwd = line.strip().split(':')
-                addressee.append(user)
+                self.addressee.append(user)
                 break
-        self.credentials, self.addressee = credentials, addressee
+
 
     def send_mail(self, msg_sub, msg_body, attach_path):
         msg = MIMEMultipart()
@@ -57,7 +58,7 @@ def main():
     print(mail.credentials.keys())
     print(mail.addressee)
 
-    mail.send_mail("TEST", "HELLO", '/home/mixxxxx/PycharmProjects/bollinger_bot2/fig_1.png')
+    #mail.send_mail("TEST", "HELLO", '/home/mixxxxx/PycharmProjects/bollinger_bot2/fig_1.png')
 
 
 
