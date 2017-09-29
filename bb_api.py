@@ -126,9 +126,9 @@ class bb_api:
         return self.merged_currencies
 
     def check_all_coins(self, path_to_coins):
-        print(os.path.getmtime(path_to_coins))
-        print(time.time())
-        print(time.time()-os.path.getmtime(path_to_coins))
+        #print(os.path.getmtime(path_to_coins))
+        #print(time.time())
+        #print(time.time()-os.path.getmtime(path_to_coins))
         if(os.path.exists(path_to_coins)):
             print("exists")
             if(time.time()-os.path.getmtime(path_to_coins) > 86400):

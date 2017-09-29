@@ -117,13 +117,17 @@ class bb_math:
         else:
             return False
 
-    def bb_plot(self, sort_Dict_price, sort_Dict_avg, sort_Dict_upp, sort_Dict_low):
-        my_labels = {"sort_Dict_price": "price_usd", "sort_Dict_avg": "mov_avg", "sort_Dict_upp": "upp_bbl", "sort_Dict_low": "low_bbl"}
+    def bb_plot(self, sort_Dict_price, sort_Dict_avg, sort_Dict_upp, sort_Dict_low, first_one):
+        if first_one:
+            plt.grid()
+            my_labels = {"sort_Dict_price": "price_usd", "sort_Dict_avg": "mov_avg", "sort_Dict_upp": "upp_bbl", "sort_Dict_low": "low_bbl"}
+        else:
+            my_labels = {"sort_Dict_price": "_nolegend_", "sort_Dict_avg": "_nolegend_", "sort_Dict_upp": "_nolegend_", "sort_Dict_low": "_nolegend_"}
         scat1 = plt.plot(sort_Dict_price.keys(), sort_Dict_price.values(), color='red', marker='o', linestyle='--', label=my_labels["sort_Dict_price"])
         scat2 = plt.plot(sort_Dict_avg.keys(), sort_Dict_avg.values(), color='blue', marker='o', linestyle='--', label=my_labels["sort_Dict_avg"])
         scat3 = plt.plot(sort_Dict_upp.keys(), sort_Dict_upp.values(), color='green', marker='o', linestyle='--', label=my_labels["sort_Dict_upp"])
         scat4 = plt.plot(sort_Dict_low.keys(), sort_Dict_low.values(), color='yellow', marker='o', linestyle='--', label=my_labels["sort_Dict_low"])
-        plt.grid()
+        #plt.grid()
         plt.legend(loc='best')
         #plt.show()
         plt.savefig("fig_1")

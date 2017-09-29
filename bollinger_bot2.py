@@ -33,8 +33,8 @@ def main():
 
 
         #get SortedDict({time:price}) from time_before
-        #api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)))
-        api.build_url_crypto_compare('BTC', 'USD', '1506706526')
+        api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)))
+        #api.build_url_crypto_compare('BTC', 'USD', '1506706526')
         #print("api.url_crypto_compare")
         #print(api.url_crypto_compare)
         api.json_crypto_compare = api.request(api.url_crypto_compare)
@@ -69,7 +69,7 @@ def main():
         #SIGNAL to BUY
         if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
             print("BUY")
-            math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+            math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, first_one)
             mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
             # mail.extract_mail_data("Usernames.txt")
             # mail.msg_sub = mail.create_msg_sub('BTC', math.input_dict.values()[-1:][0])
