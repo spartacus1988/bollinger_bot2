@@ -1,3 +1,5 @@
+import os
+import time
 import json as jsn
 import requests
 from sortedcontainers import SortedDict
@@ -33,7 +35,15 @@ class bb_api:
 
 
     def request(self, url):
-        self.json = requests.get(url).text
+        #self.json = requests.get(url, timeout=0.1).text
+        for i in range(3):
+            try:
+                self.json = requests.get(url, timeout=1).text
+                print("Timeout was not occurred")
+                break
+            except requests.exceptions.Timeout:
+                print("Timeout occurred")
+
         #print(self.json)
         self.json = jsn.loads(self.json)
         #print(jsn.dumps(self.json, sort_keys=True, indent=4))
@@ -88,7 +98,19 @@ class bb_api:
         print(len(self.merged_currencies))
 
 
+    def get_coins(self):
+        self.build_url_bitTrex_currencies()
+        self.json_bitTrex_currencies = self.request(self.url_bitTrex_currencies)
+        self.extract_bitTrex_coins()
+
+        self.build_url_coinMarketCup()
+        self.json_coinMarketCup = self.request(self.url_coinMarketCup)
+        self.extract_coinMarketCu_coins()
+
+        self.merge_coins()
+
     def write_coins(self, path_to_coins):
+        self.get_coins()
         f = open(path_to_coins, 'w')
         f.writelines("%s\n" % i for i in self.merged_currencies)
         f.close()
@@ -99,12 +121,32 @@ class bb_api:
             self.merged_currencies = f.read().splitlines()
             print(self.merged_currencies)
             print(len(self.merged_currencies))
+        return self.merged_currencies
+
+    def check_all_coins(self, path_to_coins):
+        print(os.path.getmtime(path_to_coins))
+        print(time.time())
+        print(time.time()-os.path.getmtime(path_to_coins))
+        if(os.path.exists(path_to_coins)):
+            print("exists")
+            if(time.time()-os.path.getmtime(path_to_coins) > 86400):
+                print("too old")
+                self.write_coins(path_to_coins)
+                return self.read_coins(path_to_coins)
+            else:
+                return self.read_coins(path_to_coins)
+        else:
+            self.write_coins(path_to_coins)
+            return self.read_coins(path_to_coins)
+
 
 
 def main():
     pass
     api = bb_api()
     #api.build_url_crypto_compare('BTC','USD')
+
+
 
     # api.build_url_bitTrex_currencies()
     #
@@ -119,12 +161,27 @@ def main():
     #
     # api.merge_coins()
     #
-    # api.write_coins('all_coins.txt')
-    api.read_coins('all_coins.txt')
+    # ####api.write_coins('all_coins.txt')
+    #api.merged_currencies = api.read_coins('all_coins.txt')
+
+
+
+
+
+
+
+    api.merged_currencies = api.check_all_coins('all_coins.txt')
+    print(api.merged_currencies)
+
+
+
+
+
+
 
     api.build_url_crypto_compare('BTC', 'USD', '1506706586')
     api.json_crypto_compare = api.request(api.url_crypto_compare)
-    print(jsn.dumps(api.json_crypto_compare, sort_keys=True, indent=4))
+    #print(jsn.dumps(api.json_crypto_compare, sort_keys=True, indent=4))
 
     temp_result = api.extract_crypto_compare()
     print(temp_result)
