@@ -5,25 +5,28 @@ import matplotlib.pyplot as plt
 class bb_math:
 
     def __init__(self):
-        #self.input_dict = SortedDict({1506379680: 3934, 1506379920: 3925, 1506380460: 3933.9, 1506379620: 3949.4, 1506380280: 3933.9, 1506380520: 3927.54, 1506379560: 3950, 1506379500: 3950, 1506380100: 3925.1, 1506379980: 3925, 1506380400: 3933.9, 1506380340: 3930, 1506379440: 3950, 1506380040: 3925.1, 1506380160: 3933.99, 1506379860: 3925, 1506380580: 3927.54, 1506379800: 3935, 1506379380: 3945, 1506380220: 3934, 1506379740: 3935})
-        # self.input_dict = SortedDict(
-        #     {1506379680: 3934, 1506379920: 3925, 1506380460: 3933.9, 1506379620: 3949.4, 1506380280: 3933.9,
-        #      1506380520: 3927.54, 1506379560: 3950, 1506379500: 3950, 1506380100: 3925.1, 1506379980: 3925,
-        #      1506380400: 3933.9, 1506380340: 3930, 1506379440: 3950, 1506380040: 3925.1, 1506380160: 3933.99,
-        #      1506379860: 3925, 1506380580: 3927.54, 1506379800: 3935, 1506379380: 3945, 1506380220: 3934,
-        #      1506379740: 3935})
-
         self.input_dict = SortedDict(
-            {1506677760: 4090, 1506677820: 4100, 1506677880: 4100, 1506677940: 4105,
-             1506678000: 4100, 1506678060: 4102, 1506678120: 4100, 1506678180: 4100,
-             1506678240: 4105, 1506678300: 4106, 1506678360: 4110, 1506678420: 4110,
-             1506678480: 4110, 1506678540: 4115, 1506678600: 4114, 1506678660: 4119,
-             1506678720: 4118.42, 1506678780: 4115, 1506678840: 4118.41,
-             1506678900: 4116, 1506678960: 4119})
+            {1506704760: 4218, 1506704820: 4218, 1506704880: 4220, 1506704940: 4218, 1506705000: 4220,
+             1506705060: 4220, 1506705120: 4220, 1506705180: 4225, 1506705240: 4230, 1506705300: 4229,
+             1506705360: 4220, 1506705420: 4225, 1506705480: 4225, 1506705540: 4225, 1506705600: 4225,
+             1506705660: 4229, 1506705720: 4229, 1506705780: 4230, 1506705840: 4232, 1506705900: 4229,
+             1506705960: 4218})
+
+        # self.input_dict = SortedDict(
+        #     {1506705360: 4220, 1506705420: 4225, 1506705480: 4225, 1506705540: 4225, 1506705600: 4225,
+        #      1506705660: 4229, 1506705720: 4229, 1506705780: 4230, 1506705840: 4232, 1506705900: 4229,
+        #      1506705960: 4218, 1506706020: 4229, 1506706080: 4229, 1506706140: 4229, 1506706200: 4207,
+        #      1506706260: 4190, 1506706320: 4190, 1506706380: 4186, 1506706440: 4177, 1506706500: 4160,
+        #      1506706560: 4165})
+
+
+
         self.running_avg = {}
         self.std_value = None
-        self.upper_line = None
-        self.lower_line = None
+        #self.upper_line = None
+        self.upper_line = {}
+        #self.lower_line = None
+        self.lower_line = {}
 
 
 
@@ -72,15 +75,27 @@ class bb_math:
 
     def bb_upper_line(self):
         #print(float(self.running_avg.values()[-1:][0]))
-        self.upper_line = float(self.running_avg.values()[-1:][0]) + (2 * self.std_value)
+        upper_line = float(self.running_avg.values()[-1:][0]) + (2 * self.std_value)
         #print(self.upper_line)
+
+        time_st = self.running_avg.keys()[-1:][0]
+        self.upper_line[time_st] = upper_line
+        # print(self.prices)
+        # print(type(self.prices))
+        self.upper_line = SortedDict(self.upper_line)
         return self.upper_line
+
 
     def bb_lower_line(self):
         #print(float(self.running_avg.values()[-1:][0]))
-        self.lower_line = float(self.running_avg.values()[-1:][0]) - (2 * self.std_value)
+        lower_line = float(self.running_avg.values()[-1:][0]) - (2 * self.std_value)
         #print(self.lower_line)
+
+        time_st = self.running_avg.keys()[-1:][0]
+        self.lower_line[time_st] = lower_line
+        self.lower_line = SortedDict(self.lower_line)
         return self.lower_line
+
 
     def bb_compare_to_buy(self, curPrice, lower_line, upper_line ):
         if ((curPrice < (lower_line + ((upper_line - lower_line) * 0.05))) and (curPrice > lower_line)) or curPrice > upper_line :
@@ -102,7 +117,8 @@ class bb_math:
         scat4 = plt.plot(sort_Dict_low.keys(), sort_Dict_low.values(), color='yellow', marker='o', linestyle='--', label=my_labels["sort_Dict_low"])
         plt.grid()
         plt.legend(loc='best')
-        plt.show()
+        #plt.show()
+        plt.savefig("fig_1")
 
 
 
@@ -116,14 +132,14 @@ def main():
     math = bb_math()
     print(math.input_dict)
     print(len(math.input_dict))
-    math.running_avg = math.moving_average_dict(math.input_dict)
+    math.running_avg = math.moving_average_FOUR(math.input_dict)
 
     #print("math.running_avg FIRST")
     #running_avg_FIRST = math.running_avg
-   # print(set(math.running_avg.keys()))
+    #print(set(math.running_avg.keys()))
 
 
-    running_avg_SECOND = math.moving_average_dict(math.running_avg)
+    #running_avg_SECOND = math.moving_average_dict(math.running_avg)
     #print("math.running_avg SECOND")
     #print(running_avg_SECOND)
 
@@ -131,10 +147,9 @@ def main():
     #running_avg_THIRD = math.moving_average_dict(running_avg_THIRD)
     #print("math.running_avg THIRD")
     #print(running_avg_THIRD)
+    #running_avg_FIRST = math.moving_average_FOUR(math.input_dict)
 
-    running_avg_FIRST = math.moving_average_FOUR(math.input_dict)
-
-    math.bb_plot(math.input_dict, running_avg_SECOND, running_avg_FIRST, running_avg_FIRST )
+    #math.bb_plot(math.input_dict, math.running_avg, running_avg_FIRST, running_avg_FIRST )
 
 
 
@@ -154,26 +169,28 @@ def main():
     print(math.lower_line)
 
 
-    if (math.input_dict.values()[-1:][0] < (math.lower_line + ((math.upper_line - math.lower_line) * 0.05))):
-        print("HALF")
-    else:
-        print("FLAH")
-    print(math.input_dict.values()[-1:][0])
-    print(math.upper_line - ((math.upper_line - math.lower_line) * 0.05))
-    print(math.upper_line)
-    print(math.lower_line + ((math.upper_line - math.lower_line) * 0.05))
-    print(math.lower_line)
+    # if (math.input_dict.values()[-1:][0] < (math.lower_line + ((math.upper_line - math.lower_line) * 0.05))):
+    #     print("HALF")
+    # else:
+    #     print("FLAH")
+    # print(math.input_dict.values()[-1:][0])
+    # print(math.upper_line - ((math.upper_line - math.lower_line) * 0.05))
+    # print(math.upper_line)
+    # print(math.lower_line + ((math.upper_line - math.lower_line) * 0.05))
+    # print(math.lower_line)
 
 
-    if (math.input_dict.values()[-1:][0] < (math.lower_line + ((math.upper_line - math.lower_line) * 0.05))) and (math.input_dict.values()[-1:][0] > math.lower_line):
-        print("COMPLETE")
+    # if (math.input_dict.values()[-1:][0] < (math.lower_line + ((math.upper_line - math.lower_line) * 0.05))) and (math.input_dict.values()[-1:][0] > math.lower_line):
+    #     print("COMPLETE")
 
-    if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0],math.lower_line, math.upper_line )):
+    if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0],math.lower_line.values()[-1:][0], math.upper_line.values()[-1:][0] )):
         print("BUY")
 
-    if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line, math.upper_line)):
+    if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0], math.upper_line.values()[-1:][0])):
         print("SELL")
 
+
+    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
 
     #print(math.running_avg)
     #print(len(math.running_avg))
