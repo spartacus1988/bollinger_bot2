@@ -11,19 +11,7 @@ import matplotlib.pyplot as plt
 
 
 
-def get_json(url):
-    r = requests.get(url)
-    return r.text
 
-
-def moving_average(x, N):
-    if (len(x)<3):
-        print("x<3")
-        return x[0]
-    else:
-        print("x>3")
-        #return np.convolve(x, np.ones((N,)) / N)[(N - 1):]
-        return np.convolve(x, np.ones((N,)) / N, mode='valid')
 
 
 

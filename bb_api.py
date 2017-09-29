@@ -1,5 +1,6 @@
 import json as jsn
 import requests
+from sortedcontainers import SortedDict
 
 
 class bb_api:
@@ -59,8 +60,12 @@ class bb_api:
                 price = item['close']
                 time_st = item['time']
                 self.prices[time_st] = price
-        self.prices = sorted(self.prices.items())
         #print(self.prices)
+        #print(type(self.prices))
+        self.prices = SortedDict(self.prices)
+        #print(type(self.prices))
+        #print(self.prices)
+        #print(self.prices.values()[0])
         return self.prices
 
 
@@ -122,7 +127,7 @@ def main():
     print(jsn.dumps(api.json_crypto_compare, sort_keys=True, indent=4))
 
     temp_result = api.extract_crypto_compare()
-    print(temp_result)
+    #print(temp_result)
 
 
 
