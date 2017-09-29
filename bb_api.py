@@ -122,12 +122,12 @@ def main():
     # api.write_coins('all_coins.txt')
     api.read_coins('all_coins.txt')
 
-    api.build_url_crypto_compare('BTC', 'USD', '1506380625')
+    api.build_url_crypto_compare('BTC', 'USD', '1506678986')
     api.json_crypto_compare = api.request(api.url_crypto_compare)
     print(jsn.dumps(api.json_crypto_compare, sort_keys=True, indent=4))
 
     temp_result = api.extract_crypto_compare()
-    #print(temp_result)
+    print(temp_result)
 
 
 
