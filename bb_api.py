@@ -66,6 +66,8 @@ class bb_api:
 
     def extract_crypto_compare(self):
         for item in self.json_crypto_compare["Data"]:
+            print("json_crypto_compare")
+            print(self.json_crypto_compare["Data"])
             if item['close'] is not None:
                 price = item['close']
                 time_st = item['time']
@@ -179,7 +181,8 @@ def main():
 
 
 
-    api.build_url_crypto_compare('BTC', 'USD', '1506706586')
+    #api.build_url_crypto_compare('BTC', 'USD', '1506706586')
+    api.build_url_crypto_compare('BTC', 'USD', '1506706526')
     api.json_crypto_compare = api.request(api.url_crypto_compare)
     #print(jsn.dumps(api.json_crypto_compare, sort_keys=True, indent=4))
 
