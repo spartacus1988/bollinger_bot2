@@ -34,15 +34,17 @@ class bb_mail:
             self.msg_sub = "Price Alert (BTRX " + sym + "/BTC @ " + str(price) + ")"
         return self.msg_sub
 
-    def create_msg_body(self, sym, rate):
+    def create_msg_body(self, sym, rate, temp_result):
         if (sym == 'BTC'):
             self.msg_body = "Price for " + sym + " currency is within a " + rate + " range.\n" \
                             "https://www.coinigy.com/main/markets/BTRX/" + sym + "/USD.\n" \
-                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"
+                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
+                            "temp_result " + str(temp_result)
         else:
             self.msg_body = "Price for " + sym + " currency is within a " + rate + " range.\n" \
                             "https://www.coinigy.com/main/markets/BTRX/" + sym + "/BTC.\n" \
-                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"
+                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"\
+                            "temp_result " + str(temp_result)
         return self.msg_body
 
 
@@ -67,10 +69,10 @@ class bb_mail:
             smtpObj.sendmail(username, self.addressee, msg.as_string())
             smtpObj.quit()
 
-    def mail_send(self, path_to_file_credentials, currency, last_price, rate, path_to_fig ):
+    def mail_send(self, path_to_file_credentials, currency, last_price, rate, path_to_fig, temp_result ):
         self.extract_mail_data(path_to_file_credentials)
         self.msg_sub = self.create_msg_sub(currency, last_price)
-        self.msg_body = self.create_msg_body(currency, rate)
+        self.msg_body = self.create_msg_body(currency, rate, temp_result)
         self.send_mail(self.msg_sub, self.msg_body, path_to_fig)
 
 

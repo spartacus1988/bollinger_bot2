@@ -65,6 +65,7 @@ class bb_api:
         print(self.cmc_currencies)
 
     def extract_crypto_compare(self):
+        self.prices = {}
         for item in self.json_crypto_compare["Data"]:
             print("json_crypto_compare")
             print(self.json_crypto_compare["Data"])

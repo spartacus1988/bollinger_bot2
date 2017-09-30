@@ -67,14 +67,14 @@ def main():
 
         #DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
         math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, first_one)
-        mail.mail_send('Usernames.txt', str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), 'fig_1.png')
+        mail.mail_send('Usernames.txt', str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), 'fig_1.png', temp_result)
 
 
         #SIGNAL to BUY
         if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
             print("BUY")
-            math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, first_one)
-            mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
+            #math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, first_one)
+            #mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
             # mail.extract_mail_data("Usernames.txt")
             # mail.msg_sub = mail.create_msg_sub('BTC', math.input_dict.values()[-1:][0])
             # mail.msg_body = mail.create_msg_body('BTC', 'buying')
@@ -85,8 +85,8 @@ def main():
         #SIGNAL to SELL
         if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
             print("SELL")
-            math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-            mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
+            #math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+           # mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
             # mail.extract_mail_data("Usernames.txt")
             # mail.msg_sub = mail.create_msg_sub('BTC', math.input_dict.values()[-1:][0])
             # mail.msg_body = mail.create_msg_body('BTC', 'selling')
