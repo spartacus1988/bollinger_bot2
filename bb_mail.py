@@ -1,6 +1,5 @@
 import os
 import datetime
-import mimetypes
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
@@ -80,19 +79,7 @@ class bb_mail:
 def main():
     pass
     mail = bb_mail()
-    print(mail.credentials.keys())
-    print(mail.addressee)
     mail.extract_mail_data("Usernames.txt")
-    print(mail.credentials.keys())
-    print(mail.addressee)
-
-    #mail.send_mail("TEST", "HELLO", '/home/mixxxxx/PycharmProjects/bollinger_bot2/fig_1.png')
-
-
-
-
-
-
 
 if __name__ == "__main__":
     main()
