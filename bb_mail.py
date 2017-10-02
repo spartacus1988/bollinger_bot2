@@ -33,17 +33,17 @@ class bb_mail:
             self.msg_sub = "Price Alert (BTRX " + sym + "/BTC @ " + str(price) + ")"
         return self.msg_sub
 
-    def create_msg_body(self, sym, rate, temp_result):
+    def create_msg_body(self, sym, rate):
         if (sym == 'BTC'):
             self.msg_body = "Price for " + sym + " currency is within a " + rate + " range.\n" \
                             "https://www.coinigy.com/main/markets/BTRX/" + sym + "/USD.\n" \
-                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
-                            "temp_result " + str(temp_result)
+                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"
+
         else:
             self.msg_body = "Price for " + sym + " currency is within a " + rate + " range.\n" \
                             "https://www.coinigy.com/main/markets/BTRX/" + sym + "/BTC.\n" \
-                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"\
-                            "temp_result " + str(temp_result)
+                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"
+
         return self.msg_body
 
 
