@@ -61,12 +61,14 @@ def main():
         delta_time = time_after - time_before
         print("delta_time is "+ str(delta_time))
         first_one = False
-        time.sleep(300 - delta_time)
+        time.sleep(30 - delta_time)
 
 if __name__ == "__main__":
-
-    #while True:
-    #    try:
-            main()
-    #    except:
-    #        continue
+    #
+    # while True:
+    #     try:
+             main()
+    #     except:
+    #         pass
+    #         print('error')
+    #         continue

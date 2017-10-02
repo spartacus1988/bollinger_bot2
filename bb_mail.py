@@ -5,6 +5,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 
+
 class bb_mail:
 
     def __init__(self):
@@ -24,7 +25,8 @@ class bb_mail:
             for line in f:
                 user, pwd = line.strip().split(':')
                 self.addressee.append(user)
-                break
+                #print(self.addressee)
+
 
     def create_msg_sub(self, sym, price):
         if (sym == 'BTC'):
@@ -47,10 +49,49 @@ class bb_mail:
         return self.msg_body
 
 
-    def send_mail(self, msg_sub, msg_body, attach_path):
+    def send_mail(self, address,  msg_sub, msg_body, attach_path):
         msg = MIMEMultipart()
         msg['Subject'] = msg_sub
-        msg['To'] = ','.join(self.addressee)
+        #msg['To'] = ', '.join(self.addressee)
+
+        del msg['To']
+
+        #assert type(self.addressee) == list
+
+
+        #
+        #print(self.addressee)
+
+        #msg['To'] = ','.join(self.addressee)
+
+        #COMMASPACE = ', '
+
+       # msg['To'] = COMMASPACE.join(self.addressee)
+
+        msg['To'] = address
+
+        print(msg['To'])
+
+        # ReportMail = {}
+        # print(ReportMail)
+        # print(self.addressee)
+        # for currentReportMail in self.addressee:
+        #     print(currentReportMail)
+        #     msg['To'] = currentReportMail
+
+        #
+        #print(msg['To'])
+        #
+        #
+        #
+        # msg['To'] = ','.join(self.addressee)
+        # #print(msg['To'])
+
+
+       # print(msg.items())
+
+
+
         text = MIMEText(msg_body)
         text.add_header("Content-Disposition", "inline")
         msg.attach(text)
@@ -65,6 +106,7 @@ class bb_mail:
             smtpObj = smtplib.SMTP('smtp.gmail.com', 587)       # connecting to gmail
             smtpObj.starttls()                                  # TLS(Transport Layer Security) on
             smtpObj.login(username, self.credentials[username])
+            #smtpObj.sendmail(username, self.addressee, msg.as_string())
             smtpObj.sendmail(username, self.addressee, msg.as_string())
             smtpObj.quit()
 
@@ -72,7 +114,9 @@ class bb_mail:
         self.extract_mail_data(path_to_file_credentials)
         self.msg_sub = self.create_msg_sub(currency, last_price)
         self.msg_body = self.create_msg_body(currency, rate)
-        self.send_mail(self.msg_sub, self.msg_body, path_to_fig)
+
+        for address in self.addressee:
+             self.send_mail(address, self.msg_sub, self.msg_body, path_to_fig)
 
 
 
