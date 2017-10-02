@@ -107,7 +107,7 @@ class bb_mail:
             smtpObj.starttls()                                  # TLS(Transport Layer Security) on
             smtpObj.login(username, self.credentials[username])
             #smtpObj.sendmail(username, self.addressee, msg.as_string())
-            smtpObj.sendmail(username, self.addressee, msg.as_string())
+            smtpObj.sendmail(username, address, msg.as_string())
             smtpObj.quit()
 
     def mail_send(self, path_to_file_credentials, currency, last_price, rate, path_to_fig):
