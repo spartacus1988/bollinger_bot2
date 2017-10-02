@@ -37,7 +37,7 @@ def main():
         math.lower_line = math.bb_lower_line()
 
 
-        #print("debug")
+        print("debug")
         math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
         mail.mail_send('Usernames.txt', str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), 'fig_1.png')
         #print("after_debug")
@@ -64,11 +64,11 @@ def main():
         time.sleep(30 - delta_time)
 
 if __name__ == "__main__":
-    #
-    # while True:
-    #     try:
-             main()
-    #     except:
-    #         pass
-    #         print('error')
-    #         continue
+     #
+     # while True:
+     #     try:
+              main()
+     #     except:
+     #         pass
+     #         print('error')
+     #         continue

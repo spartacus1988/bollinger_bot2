@@ -1,6 +1,11 @@
 import numpy as np
 from sortedcontainers import SortedDict
+#import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
+
 
 class bb_math:
 
