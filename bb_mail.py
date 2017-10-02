@@ -68,10 +68,10 @@ class bb_mail:
             smtpObj.sendmail(username, self.addressee, msg.as_string())
             smtpObj.quit()
 
-    def mail_send(self, path_to_file_credentials, currency, last_price, rate, path_to_fig, temp_result ):
+    def mail_send(self, path_to_file_credentials, currency, last_price, rate, path_to_fig):
         self.extract_mail_data(path_to_file_credentials)
         self.msg_sub = self.create_msg_sub(currency, last_price)
-        self.msg_body = self.create_msg_body(currency, rate, temp_result)
+        self.msg_body = self.create_msg_body(currency, rate)
         self.send_mail(self.msg_sub, self.msg_body, path_to_fig)
 
 
