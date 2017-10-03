@@ -62,14 +62,14 @@ def main():
                 if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
                     print("BUY " + cryptocurrency)
                     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                    mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
+                    mail.mail_send('Usernames.txt', cryptocurrency, math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
 
 
                 #SIGNAL to SELL
                 if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
                     print("SELL " + cryptocurrency)
                     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                    mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
+                    mail.mail_send('Usernames.txt', cryptocurrency, math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
 
 
 
