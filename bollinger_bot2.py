@@ -21,14 +21,15 @@ def main():
         for cryptocurrency in api.merged_currencies:
             #print(cryptocurrency)
             if cryptocurrency is not 'BTC':
+                # get SortedDict({time:price}) from time_before
                 api.build_url_crypto_compare(cryptocurrency, 'BTC', str(int(time_before)))
                 #print(api.url_crypto_compare)
             else:
                 api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)))
                 #print(api.url_crypto_compare)
 
-            #get SortedDict({time:price}) from time_before
-            api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)))
+
+
             api.json_crypto_compare = api.request(api.url_crypto_compare)
             temp_result = api.extract_crypto_compare()
 
