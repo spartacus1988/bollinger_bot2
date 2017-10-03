@@ -84,12 +84,12 @@ def main():
         time.sleep(300 - delta_time)
 
 if __name__ == "__main__":
-      #
-      # while True:
-      #     try:
-               main()
-      #     except:
-      #         pass
-      #         print('error')
-      #         sys.stdout.flush()
-      #         continue
+
+      while True:
+          try:
+              main()
+          except:
+              pass
+              print('error')
+              sys.stdout.flush()
+              continue
