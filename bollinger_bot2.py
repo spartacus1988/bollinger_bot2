@@ -33,39 +33,43 @@ def main():
             api.json_crypto_compare = api.request(api.url_crypto_compare)
             temp_result = api.extract_crypto_compare()
 
-            #get input_dict for math
-            math.input_dict = temp_result
+            #print(temp_result)
 
-            #calculating mov_avg
-            math.running_avg = math.moving_average_FOUR(math.input_dict)
+            if len(temp_result.keys()) != 0:
 
-            #calculating std
-            math.std_dict = math.bb_std(math.input_dict)
+                #get input_dict for math
+                math.input_dict = temp_result
 
-            #calculating upper_line
-            #print(math.running_avg)
-            math.upper_line = math.bb_upper_line()
+                #calculating mov_avg
+                math.running_avg = math.moving_average_FOUR(math.input_dict)
 
-            #calculating lower_line
-            math.lower_line = math.bb_lower_line()
+                #calculating std
+                math.std_dict = math.bb_std(math.input_dict)
 
-            #print("debug")
-            #math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-            #mail.mail_send('Usernames.txt', str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), 'fig_1.png')
-            #print("after_debug")
+                #calculating upper_line
+                #print(math.running_avg)
+                math.upper_line = math.bb_upper_line()
 
-            #SIGNAL to BUY
-            if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
-                print("BUY " + cryptocurrency)
-                math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
+                #calculating lower_line
+                math.lower_line = math.bb_lower_line()
+
+                #print("debug")
+                #math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+                #mail.mail_send('Usernames.txt', str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), 'fig_1.png')
+                #print("after_debug")
+
+                #SIGNAL to BUY
+                if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
+                    print("BUY " + cryptocurrency)
+                    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+                    mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
 
 
-            #SIGNAL to SELL
-            if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
-                print("SELL " + cryptocurrency)
-                math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
+                #SIGNAL to SELL
+                if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
+                    print("SELL " + cryptocurrency)
+                    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+                    mail.mail_send('Usernames.txt', 'BTC', math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
 
 
 
@@ -80,12 +84,12 @@ def main():
         time.sleep(300 - delta_time)
 
 if __name__ == "__main__":
-
-      while True:
-          try:
-              main()
-          except:
-              pass
-              print('error')
-              sys.stdout.flush()
-              continue
+      #
+      # while True:
+      #     try:
+               main()
+      #     except:
+      #         pass
+      #         print('error')
+      #         sys.stdout.flush()
+      #         continue
