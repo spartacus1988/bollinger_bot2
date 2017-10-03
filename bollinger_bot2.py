@@ -44,7 +44,10 @@ def main():
                 math.running_avg = math.moving_average_FOUR(math.input_dict)
 
                 #calculating std
-                math.std_dict = math.bb_std(math.input_dict)
+                math.std_value = math.bb_std(math.input_dict)
+                print('math.std_value is ')
+                print(math.std_value)
+                sys.stdout.flush()
 
                 #calculating upper_line
                 #print(math.running_avg)
@@ -59,14 +62,14 @@ def main():
                 #print("after_debug")
 
                 #SIGNAL to BUY
-                if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
+                if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])) and (math.std_value > 0):
                     print("BUY " + cryptocurrency)
                     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
                     mail.mail_send('Usernames.txt', cryptocurrency, math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
 
 
                 #SIGNAL to SELL
-                if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])):
+                if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])) and (math.std_value > 0):
                     print("SELL " + cryptocurrency)
                     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
                     mail.mail_send('Usernames.txt', cryptocurrency, math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
@@ -81,7 +84,7 @@ def main():
         print("delta_time is " + str(delta_time))
         sys.stdout.flush()
         first_one = False
-        time.sleep(300 - delta_time)
+        time.sleep(1500 - delta_time)
 
 if __name__ == "__main__":
 
