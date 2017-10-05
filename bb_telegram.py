@@ -1,6 +1,6 @@
 
 from telegram.ext import Updater, CommandHandler, Job
-import logging, yaml, sys, os
+import logging, yaml, sys, os,time
 
 
 
@@ -47,7 +47,12 @@ def error(bot, update, error):
 
 
 def start(bot, update):
-    bot.send_message(chat_id=-1001116291223, text="I'm a bot, please talk to me!")
+    #bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
+    #bot.send_message(chat_id=1116291223, text="I'm a bot, please talk to me!")
+    bot.send_message(chat_id=683976468, text="I'm a bot, please talk to me!")
+
+
+    print("message was send")
 
 
 
@@ -62,7 +67,8 @@ def main():
     dp = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", start, pass_job_queue=True))
+    #dp.add_handler(CommandHandler("start", start, pass_job_queue=True))
+    dp.add_handler(CommandHandler("start", start))
     #dp.add_handler(CommandHandler("stop", stop, pass_job_queue=True))
     #dp.add_handler(CommandHandler("help", start))
     #dp.add_handler(CommandHandler("cat", cat, pass_args=True))
@@ -71,8 +77,7 @@ def main():
     # log all errors
     dp.add_error_handler(error)
 
-    # Start the Bot
-    updater.start_polling()
+
 
     # Block until the you presses Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
@@ -91,9 +96,26 @@ def main():
     #     )
     # )
 
+    #while True:
+        # Start the Bot
+    updater.start_polling()
 
-    print('idle')
-    updater.idle()
+        #text = update.message.text
+        #print(updater.bot.get_me())
+        #print(updater.bot.getUpdates())
+
+    #updater.bot.send_message(config['users'][0], text="I'm a bot, please talk to me!")
+
+    print(config['users'][0])
+
+
+        #print(dp.text)
+        #time.sleep(5)
+
+
+
+        #print('idle')
+        #updater.idle()
 
 
 
