@@ -1,0 +1,15 @@
+# Put your Telegram bot token here
+token: YOUR_BOT_TOKEN_HERE
+
+# How often(in seconds) content of the files will be sent to you
+interval: 14
+
+# List of monitored files.
+# For security reasons you are allowed to echo only this files
+files:
+  - .gitignore
+  - config.yml
+
+# Allowed users. Only users from this list could get content of the files
+users:
+- your_telegram_username
