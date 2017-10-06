@@ -135,10 +135,10 @@ if __name__ == "__main__":
     logger = init_log()
     config = get_config('config.yml')
 
-    if config['mode'] == 'DEBUG:':
+    if config['mode'] == 'DEBUG':
         main()
 
-    elif  config['mode'] == 'PROD:':
+    elif  config['mode'] == 'PROD':
 
       while True:
           try:
