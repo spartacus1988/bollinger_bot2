@@ -3,6 +3,8 @@ from sortedcontainers import SortedDict
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import datetime as dt
+import matplotlib.dates as md
 
 
 
@@ -76,10 +78,20 @@ class bb_math:
     def bb_plot(self, sort_Dict_price, sort_Dict_avg, sort_Dict_upp, sort_Dict_low, cryptocurrency):
         plt.grid()
         my_labels = {"sort_Dict_price": "price_usd", "sort_Dict_avg": "mov_avg", "sort_Dict_upp": "upp_bbl", "sort_Dict_low": "low_bbl"}
-        scat1 = plt.plot(sort_Dict_price.keys(), sort_Dict_price.values(), color='red', marker='o', linestyle='--', label=my_labels["sort_Dict_price"])
-        scat2 = plt.plot(sort_Dict_avg.keys(), sort_Dict_avg.values(), color='blue', marker='o', linestyle='--', label=my_labels["sort_Dict_avg"])
-        scat3 = plt.plot(sort_Dict_upp.keys(), sort_Dict_upp.values(), color='green', marker='o', linestyle='--', label=my_labels["sort_Dict_upp"])
-        scat4 = plt.plot(sort_Dict_low.keys(), sort_Dict_low.values(), color='yellow', marker='o', linestyle='--', label=my_labels["sort_Dict_low"])
+        dates_price = [dt.datetime.fromtimestamp(ts) for ts in sort_Dict_price.keys()]
+        dates_last_point = [dt.datetime.fromtimestamp(ts) for ts in sort_Dict_upp.keys()]
+
+        plt.subplots_adjust(bottom=0.2)
+        plt.xticks(rotation=25)
+        ax = plt.gca()
+        xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
+        ax.xaxis.set_major_formatter(xfmt)
+
+        scat1 = plt.plot(dates_price, sort_Dict_price.values(), color='red', marker='o', linestyle='--', label=my_labels["sort_Dict_price"])
+        scat2 = plt.plot(dates_price, sort_Dict_avg.values(), color='blue', marker='o', linestyle='--', label=my_labels["sort_Dict_avg"])
+        scat3 = plt.plot(dates_last_point, sort_Dict_upp.values(), color='green', marker='o', linestyle='--', label=my_labels["sort_Dict_upp"])
+        scat4 = plt.plot(dates_last_point, sort_Dict_low.values(), color='green', marker='o', linestyle='--', label=my_labels["sort_Dict_low"])
+
         plt.legend(loc='best')
         #plt.show()
 
