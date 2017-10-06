@@ -73,7 +73,7 @@ class bb_math:
         else:
             return False
 
-    def bb_plot(self, sort_Dict_price, sort_Dict_avg, sort_Dict_upp, sort_Dict_low):
+    def bb_plot(self, sort_Dict_price, sort_Dict_avg, sort_Dict_upp, sort_Dict_low, cryptocurrency):
         plt.grid()
         my_labels = {"sort_Dict_price": "price_usd", "sort_Dict_avg": "mov_avg", "sort_Dict_upp": "upp_bbl", "sort_Dict_low": "low_bbl"}
         scat1 = plt.plot(sort_Dict_price.keys(), sort_Dict_price.values(), color='red', marker='o', linestyle='--', label=my_labels["sort_Dict_price"])
@@ -82,7 +82,21 @@ class bb_math:
         scat4 = plt.plot(sort_Dict_low.keys(), sort_Dict_low.values(), color='yellow', marker='o', linestyle='--', label=my_labels["sort_Dict_low"])
         plt.legend(loc='best')
         #plt.show()
-        plt.savefig("fig_1")
+
+        if cryptocurrency is not 'BTC':
+            filename = cryptocurrency + '_BTC.png'
+        else:
+            filename = 'BTC_USD.png'
+
+        #file = open(filename, "w")
+        with open(filename, 'w') as f:
+            f.close()
+
+        filename_without_extension = filename.split('.')[0]
+
+        plt.savefig(filename_without_extension)
+
+        #plt.savefig("fig_1")
         plt.clf()
         #plt.cla()
 
@@ -105,7 +119,7 @@ def main():
     if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0], math.upper_line.values()[-1:][0]), 5):
         print("SELL")
 
-    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+    #math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, cryptocurrency)
 
 
 if __name__ == "__main__":

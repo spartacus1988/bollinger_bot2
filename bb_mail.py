@@ -36,7 +36,7 @@ class bb_mail:
         return self.msg_body
 
 
-    def send_mail(self, address,  msg_sub, msg_body, files):
+    def send_mail(self, address,  msg_sub, msg_body, cryptocurrency):
         msg = MIMEMultipart()
         msg['Subject'] = msg_sub
         del msg['To']
@@ -48,11 +48,14 @@ class bb_mail:
         text.add_header("Content-Disposition", "inline")
         msg.attach(text)
 
-        for attach_path in files:
-            attach = MIMEApplication(open(attach_path, 'rb').read())
-            filename = os.path.basename(attach_path)
-            attach.add_header('Content-Disposition', 'attachment', filename=filename)
-            msg.attach(attach)
+
+        if cryptocurrency is not 'BTC':
+            filename = cryptocurrency + '_BTC.png'
+        else:
+            filename = 'BTC_USD.png'
+        attach = MIMEApplication(open(filename, 'rb').read())
+        attach.add_header('Content-Disposition', 'attachment', filename=filename)
+        msg.attach(attach)
 
         for username in self.credentials:
             msg['From'] = username
@@ -64,16 +67,17 @@ class bb_mail:
 
 
 
-    def mail_send(self, credentials, addressee,  currency, last_price, rate, files):
+
+    def mail_send(self, credentials, addressee,  cryptocurrency, last_price, rate):
         for credential in credentials:
             user, pwd = credential.strip().split(':')
             self.credentials[user] = pwd
         self.addressee = addressee
-        self.msg_sub = self.create_msg_sub(currency, last_price)
-        self.msg_body = self.create_msg_body(currency, rate)
+        self.msg_sub = self.create_msg_sub(cryptocurrency, last_price)
+        self.msg_body = self.create_msg_body(cryptocurrency, rate)
 
         for address in self.addressee:
-             self.send_mail(address, self.msg_sub, self.msg_body, files)
+             self.send_mail(address, self.msg_sub, self.msg_body, cryptocurrency)
 
 
 

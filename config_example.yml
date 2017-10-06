@@ -38,11 +38,7 @@ users:
 # How often(in seconds) notify will be sent.
 interval: 1500
 
-# List of paths attached files.
-files:
-- fig_1.png
-#- fig_2.png
-#- README.md
+
 
 
 #############################################################################################
