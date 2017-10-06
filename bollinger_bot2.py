@@ -98,8 +98,8 @@ def main():
                 math.lower_line = math.bb_lower_line()
 
                 #print("debug")
-                math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                mail.mail_send(config['msg_from'], config['msg_to'], str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], 5)), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], 5)), config['files'])
+                #math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+                #mail.mail_send(config['msg_from'], config['msg_to'], str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], 5)), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], 5)), config['files'])
                 #print("after_debug")
 
                 #SIGNAL to BUY
