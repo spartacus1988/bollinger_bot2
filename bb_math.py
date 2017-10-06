@@ -1,6 +1,5 @@
 import numpy as np
 from sortedcontainers import SortedDict
-#import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -35,8 +34,8 @@ class bb_math:
         return_sorted_dict = SortedDict(return_sorted_dict)
         return return_sorted_dict
 
-    def moving_average_FOUR(self, sorted_dict):
-        for i in range(4):
+    def moving_average_FOUR(self, sorted_dict, num_avg):
+        for i in range(num_avg):
             sorted_dict = self.moving_average_dict(sorted_dict)
         return sorted_dict
 
@@ -62,14 +61,14 @@ class bb_math:
         self.lower_line = SortedDict(self.lower_line)
         return self.lower_line
 
-    def bb_compare_to_buy(self, curPrice, lower_line, upper_line ):
-        if ((curPrice < (lower_line + ((upper_line - lower_line) * 0.05))) and (curPrice > lower_line)) or curPrice > upper_line :
+    def bb_compare_to_buy(self, curPrice, lower_line, upper_line, percent):
+        if ((curPrice < (lower_line + ((upper_line - lower_line) * percent * 0.01))) and (curPrice > lower_line)) or curPrice > upper_line :
             return True
         else:
             return False
 
-    def bb_compare_to_sell(self, curPrice, lower_line, upper_line):
-        if ((curPrice > (upper_line - ((upper_line - lower_line) * 0.05))) and (curPrice < upper_line)) or curPrice < lower_line:
+    def bb_compare_to_sell(self, curPrice, lower_line, upper_line, percent):
+        if ((curPrice > (upper_line - ((upper_line - lower_line) * percent * 0.01))) and (curPrice < upper_line)) or curPrice < lower_line:
             return True
         else:
             return False
@@ -95,15 +94,15 @@ def main():
     running_avg_THIRD = []
 
     math = bb_math()
-    math.running_avg = math.moving_average_FOUR(math.input_dict)
+    math.running_avg = math.moving_average_FOUR(math.input_dict, 4)
     math.std_dict = math.bb_std(math.input_dict)
     math.upper_line = math.bb_upper_line()
     math.lower_line = math.bb_lower_line()
 
-    if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0],math.lower_line.values()[-1:][0], math.upper_line.values()[-1:][0] )):
+    if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0],math.lower_line.values()[-1:][0], math.upper_line.values()[-1:][0] ), 5):
         print("BUY")
 
-    if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0], math.upper_line.values()[-1:][0])):
+    if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0], math.upper_line.values()[-1:][0]), 5):
         print("SELL")
 
     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)

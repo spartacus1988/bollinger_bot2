@@ -29,8 +29,8 @@ class bb_api:
     def build_url_bitTrex_currencies(self):
         self.url_bitTrex_currencies = "https://bittrex.com/api/v1.1/public/getcurrencies"
 
-    def build_url_crypto_compare(self, first, second, totime):
-        self.url_crypto_compare = "https://min-api.cryptocompare.com/data/histominute?fsym=" + first + "&tsym=" + second + "&toTs=" + totime + "&limit=20&e=BitTrex"
+    def build_url_crypto_compare(self, first, second, totime, limit):
+        self.url_crypto_compare = "https://min-api.cryptocompare.com/data/histominute?fsym=" + first + "&tsym=" + second + "&toTs=" + totime + "&limit=" + str(limit) + "&e=BitTrex"
 
     def request(self, url):
         for i in range(5):

@@ -1,15 +1,58 @@
+#############################################################################################
+#########################  Script mode  #####################################################
+#############################################################################################
+mode: DEBUG
+#mode: PROD
+
+
+#############################################################################################
+####################  Settings for e-mailing ################################################
+#############################################################################################
+e-mailing_status: ON
+# Put your e-mail and password to send mail (@gmail.com only)
+msg_from:
+- my_post@gmail.com:my_password
+
+# Put list of e-mails for distribution
+msg_to:
+- mail_for_spam@mail.ru
+
+
+#############################################################################################
+####################  Settings for telegram  ################################################
+#############################################################################################
+telegram_status: ON
 # Put your Telegram bot token here
-token: YOUR_BOT_TOKEN_HERE
+token: 123456789:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-# How often(in seconds) content of the files will be sent to you
-interval: 14
 
-# List of monitored files.
-# For security reasons you are allowed to echo only this files
-files:
-  - .gitignore
-  - config.yml
-
-# Allowed users. Only users from this list could get content of the files
+# Allowed user_id and chat_id. Only users from this list could get content.
 users:
-- your_telegram_username
+- -100chat_id
+
+
+
+#############################################################################################
+################  Common settings for telegram and e-mailing  ###############################
+#############################################################################################
+# How often(in seconds) notify will be sent.
+interval: 1500
+
+# List of paths attached files.
+files:
+- fig_1.png
+#- fig_2.png
+#- README.md
+
+
+#############################################################################################
+#######################  Settings for Bollinger bands  ######################################
+#############################################################################################
+# Number of iterations for averaging moving_average
+num_avg: 4
+
+# Number of last points for calculating the root-mean-square deviation
+limit: 20
+
+# Percentage of proximity of current price to the Bollinger line
+percent: 5

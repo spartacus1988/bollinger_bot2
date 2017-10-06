@@ -1,131 +1,52 @@
 
 from telegram.ext import Updater, CommandHandler, Job
-import logging, yaml, sys, os,time
+import logging
+import yaml
+import sys
+import os
+import time
 
 
 
+class bb_telegram():
 
-def init_log():
-    # Enable logging
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.DEBUG,
-        filename='bot.log',
-        filemode='w',
-    )
-
-    logger = logging.getLogger(__name__)
-    return logger
+    def __init__(self, token, chat_id):
+        self.chat_id = chat_id
+        self.token = token
+        self.updater = Updater(self.token)
+        self.dp = self.updater.dispatcher
+        self.dp.add_handler(CommandHandler("start", self.start))
+        self.updater.start_polling()
+        #self.updater.idle()
 
 
-def get_config(path_to_config):
-    # Trying to read config
+    def start(self):
+        #bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
+        #bot.send_message(chat_id=1116291223, text="I'm a bot, please talk to me!")
+        #bot.send_message(chat_id=683976468, text="I'm a bot, please talk to me!")
+        self.dp.bot.send_message(chat_id=self.chat_id, text="I'm starting now!")
+        print("message was send")
+
+
+    def send(self):
+        self.dp.bot.send_message(chat_id=self.chat_id, text="I'm a bot, please talk to me!")
+        print("message was send")
+
+
+
+def main():
+
     try:
-        with open(path_to_config, 'r') as ymlfile:
+        with open('config.yml', 'r') as ymlfile:
             config = yaml.load(ymlfile)
     except BaseException:
         print(path_to_config + " file is not exists! Please create it first.")
         sys.exit()
 
-    if config['token'] == '':
-        print("Please configure your Telegram bot token")
-        sys.exit()
-
-    if len(config['files']) == 0:
-        print("Please add some files to the config")
-        sys.exit()
-
-    if config['interval'] == 0 or config['interval'] == '':
-        logger.warn('Notify interval is not set. I will send log files every 4 hours')
-    config['interval'] = 4*60*60
-    return config
-
-
-
-def error(bot, update, error):
-    logger.warn('Update "%s" caused error "%s"' % (update, error))
-
-
-def start(bot, update):
-    #bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
-    #bot.send_message(chat_id=1116291223, text="I'm a bot, please talk to me!")
-    bot.send_message(chat_id=683976468, text="I'm a bot, please talk to me!")
-
-
-    print("message was send")
-
-
-
-
-def main():
-    logger = init_log()
-    config = get_config('config.yml')
-
-    updater = Updater(config['token'])
-
-    # Get the dispatcher to register handlers
-    dp = updater.dispatcher
-
-    # on different commands - answer in Telegram
-    #dp.add_handler(CommandHandler("start", start, pass_job_queue=True))
-    dp.add_handler(CommandHandler("start", start))
-    #dp.add_handler(CommandHandler("stop", stop, pass_job_queue=True))
-    #dp.add_handler(CommandHandler("help", start))
-    #dp.add_handler(CommandHandler("cat", cat, pass_args=True))
-    # dp.add_handler(CommandHandler("set", set, pass_args=True))
-
-    # log all errors
-    dp.add_error_handler(error)
-
-
-
-    # Block until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-
-
-
-
-    # bot.sendMessage(
-    #     -1001116291223,
-    #     parse_mode="Markdown",
-    #     text=(
-    #         "Howdy!\n"
-    #         "Write */cat* to output all configured files,\n"
-    #         "or */cat *_filename_ _filename2_ ' ' to send only _filename_ and _filename2_ (those files must be defined in the config file)"
-    #     )
-    # )
-
-    #while True:
-        # Start the Bot
-    updater.start_polling()
-
-        #text = update.message.text
-        #print(updater.bot.get_me())
-        #print(updater.bot.getUpdates())
-
-    #updater.bot.send_message(config['users'][0], text="I'm a bot, please talk to me!")
-
-    print(config['users'][0])
-
-
-        #print(dp.text)
-        #time.sleep(5)
-
-
-
-        #print('idle')
-        #updater.idle()
-
-
-
-
-
-
-
-
-
-
+    token = config['token']
+    chat_id = config['users'][0]
+    telegram = bb_telegram(token, chat_id)
+    telegram.send()
 
 
 if __name__ == "__main__":

@@ -3,11 +3,52 @@ import time
 import bb_api
 import bb_math
 import bb_mail
+import logging
+import yaml
+
+
+
+def init_log():
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG,
+        filename='bot.log',
+        filemode='w',
+    )
+    logger = logging.getLogger(__name__)
+    return logger
+
+
+def get_config(path_to_config):
+    try:
+        with open(path_to_config, 'r') as ymlfile:
+            config = yaml.load(ymlfile)
+    except BaseException:
+        print(path_to_config + " file is not exists! Please create it first.")
+        sys.exit()
+
+    if config['token'] == '':
+        print("Please configure your Telegram bot token")
+        sys.exit()
+
+    if len(config['files']) == 0:
+        print("Please add some files to the config")
+        sys.exit()
+
+    if config['interval'] == 0 or config['interval'] == '':
+        logger.warn('Notify interval is not set. I will send log files every 4 hours')
+        config['interval'] = 4*60*60
+    return config
+
+
+
 
 
 def main():
     first_one = True
+
     while True:
+
         time_before = time.time()
 
         #get all instance objects
@@ -22,10 +63,10 @@ def main():
             #print(cryptocurrency)
             if cryptocurrency is not 'BTC':
                 # get SortedDict({time:price}) from time_before
-                api.build_url_crypto_compare(cryptocurrency, 'BTC', str(int(time_before)))
+                api.build_url_crypto_compare(cryptocurrency, 'BTC', str(int(time_before)), config['limit'])
                 #print(api.url_crypto_compare)
             else:
-                api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)))
+                api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)), config['limit'])
                 #print(api.url_crypto_compare)
 
 
@@ -41,7 +82,7 @@ def main():
                 math.input_dict = temp_result
 
                 #calculating mov_avg
-                math.running_avg = math.moving_average_FOUR(math.input_dict)
+                math.running_avg = math.moving_average_FOUR(math.input_dict, config['num_avg'])
 
                 #calculating std
                 math.std_value = math.bb_std(math.input_dict)
@@ -57,22 +98,24 @@ def main():
                 math.lower_line = math.bb_lower_line()
 
                 #print("debug")
-                #math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                #mail.mail_send('Usernames.txt', str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])), 'fig_1.png')
+                math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
+                mail.mail_send(config['msg_from'], config['msg_to'], str(math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], 5)), math.input_dict.values()[-1:][0], str(math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], 5)), config['files'])
                 #print("after_debug")
 
                 #SIGNAL to BUY
-                if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])) and (math.std_value > 0):
+                if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
                     print("BUY " + cryptocurrency)
                     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                    mail.mail_send('Usernames.txt', cryptocurrency, math.input_dict.values()[-1:][0], 'buying', 'fig_1.png')
+                    if (config['e-mailing_status']):
+                        mail.mail_send(config['msg_from'], config['msg_to'], cryptocurrency, math.input_dict.values()[-1:][0], 'buying', config['files'])
 
 
                 #SIGNAL to SELL
-                if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0])) and (math.std_value > 0):
+                if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
                     print("SELL " + cryptocurrency)
                     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line)
-                    mail.mail_send('Usernames.txt', cryptocurrency, math.input_dict.values()[-1:][0], 'selling', 'fig_1.png')
+                    if (config['e-mailing_status']):
+                        mail.mail_send(config['msg_from'], config['msg_to'], cryptocurrency, math.input_dict.values()[-1:][0], 'selling', config['files'])
 
 
 
@@ -84,15 +127,24 @@ def main():
         print("delta_time is " + str(delta_time))
         sys.stdout.flush()
         first_one = False
-        time.sleep(1500 - delta_time)
+        time.sleep(config['interval'] - delta_time)
+
 
 if __name__ == "__main__":
 
+    logger = init_log()
+    config = get_config('config.yml')
+
+    if config['mode'] == 'DEBUG:':
+        main()
+
+    elif  config['mode'] == 'PROD:':
+
       while True:
           try:
-              main()
-          except:
-              pass
-              print('error')
+            main()
+          except Exception as error:
+              #print(error)
+              logger.error(error)
               sys.stdout.flush()
               continue
