@@ -64,13 +64,13 @@ class bb_math:
         return self.lower_line
 
     def bb_compare_to_buy(self, curPrice, lower_line, upper_line, percent):
-        if ((curPrice < (lower_line + ((upper_line - lower_line) * percent * 0.01))) and (curPrice > lower_line)) or curPrice > upper_line :
+        if ((curPrice < (lower_line + ((upper_line - lower_line) * percent * 0.01)))):
             return True
         else:
             return False
 
     def bb_compare_to_sell(self, curPrice, lower_line, upper_line, percent):
-        if ((curPrice > (upper_line - ((upper_line - lower_line) * percent * 0.01))) and (curPrice < upper_line)) or curPrice < lower_line:
+        if ((curPrice > (upper_line - ((upper_line - lower_line) * percent * 0.01)))):
             return True
         else:
             return False
