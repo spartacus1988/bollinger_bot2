@@ -12,6 +12,7 @@ class bb_api:
         self.json_crypto_compare = None
         self.json_bitTrex_currencies = None
         self.json_coinMarketCup = None
+        self.json_addinfo = None
 
         self.btx_currencies = []
         self.cmc_currencies = []
@@ -21,6 +22,7 @@ class bb_api:
         self.url_crypto_compare = None
         self.url_bitTrex_currencies = None
         self.url_coinMarketCup = None
+        self.url_addinfo = None
 
 
     def build_url_coinMarketCup(self):
@@ -31,6 +33,14 @@ class bb_api:
 
     def build_url_crypto_compare(self, first, second, totime, limit):
         self.url_crypto_compare = "https://min-api.cryptocompare.com/data/histominute?fsym=" + first + "&tsym=" + second + "&toTs=" + totime + "&limit=" + str(limit) + "&e=BitTrex"
+
+
+    def build_url_addinfo(self, cryptocurrency):
+        if cryptocurrency is not 'BTC':
+            self.url_addinfo = "https://www.cryptocompare.com/api/data/coinsnapshot/?fsym=" + cryptocurrency + "&tsym=BTC"
+        else:
+            self.url_addinfo = "https://www.cryptocompare.com/api/data/coinsnapshot/?fsym=BTC&tsym=USD"
+
 
     def request(self, url):
         for i in range(5):
@@ -69,6 +79,13 @@ class bb_api:
                 self.prices[time_st] = price
         self.prices = SortedDict(self.prices)
         return self.prices
+
+    def extract_addinfo(self):
+        for item in self.json_addinfo["Data"]["Exchanges"]:
+            if item['MARKET'] == 'BitTrex':
+                #print(item['VOLUME24HOUR'])
+                return item['VOLUME24HOUR']
+
 
     def merge_coins(self):
         self.btx_currencies = set(self.btx_currencies)
@@ -118,11 +135,18 @@ class bb_api:
 def main():
     pass
     api = bb_api()
-    api.merged_currencies = api.check_all_coins('all_coins.txt')
-    api.build_url_crypto_compare('BTC', 'USD', '1506706526')
-    api.json_crypto_compare = api.request(api.url_crypto_compare)
+    api.build_url_addinfo('ETH')
+    api.json_addinfo = api.request(api.url_addinfo)
+    vol_24h = api.extract_addinfo()
+    #print(jsn.dumps(api.json_addinfo, sort_keys=True, indent=4))
+    #print()
+
+
+    #api.merged_currencies = api.check_all_coins('all_coins.txt')
+    #api.build_url_crypto_compare('BTC', 'USD', '1506706526')
+    #api.json_crypto_compare = api.request(api.url_crypto_compare)
     #print(jsn.dumps(api.json_crypto_compare, sort_keys=True, indent=4))
-    temp_result = api.extract_crypto_compare()
+    #temp_result = api.extract_crypto_compare()
     #print(temp_result)
 
 if __name__ == "__main__":

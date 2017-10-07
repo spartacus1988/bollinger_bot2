@@ -44,11 +44,16 @@ def get_config(path_to_config):
 
 
 
-def send_handler(math, mail, config, cryptocurrency, rate):
+def send_handler(api, math, mail, config, cryptocurrency, rate):
+
     math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, cryptocurrency)
 
+    api.build_url_addinfo(cryptocurrency)
+    api.json_addinfo = api.request(api.url_addinfo)
+    vol_24h = api.extract_addinfo()
+
     if (config['e-mailing_status']):
-        mail.mail_send(config['msg_from'], config['msg_to'], cryptocurrency, math.input_dict.values()[-1:][0], rate)
+        mail.mail_send(config['msg_from'], config['msg_to'], cryptocurrency, math.input_dict.values()[-1:][0], rate, vol_24h)
 
     if cryptocurrency is not 'BTC':
         try:
@@ -117,17 +122,17 @@ def main():
 
 
                 #print("debug")
-                send_handler(math, mail, config, cryptocurrency, 'debug')
+                #send_handler(api, math, mail, config, cryptocurrency, 'debug')
 
                 #SIGNAL to BUY
                 if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
                     print("BUY " + cryptocurrency)
-                    send_handler(math, mail, config, cryptocurrency, 'buying')
+                    send_handler(api, math, mail, config, cryptocurrency, 'buying')
 
                 #SIGNAL to SELL
                 if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
                     print("SELL " + cryptocurrency)
-                    send_handler(math, mail, config, cryptocurrency, 'selling')
+                    send_handler(api, math, mail, config, cryptocurrency, 'selling')
 
 
         #delay for 5 minutes
