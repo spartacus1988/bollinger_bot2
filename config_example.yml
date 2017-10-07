@@ -38,6 +38,11 @@ users:
 # How often(in seconds) notify will be sent.
 interval: 1500
 
+# Minimum volume of trading on the BitTrex exchange in the last 24 hours in USD
+24hr_Vol: 500000
+
+# Minimum capitalization of the cryptocurrency in USD
+min_Cap: 50000000
 
 
 

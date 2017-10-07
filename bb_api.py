@@ -61,10 +61,10 @@ class bb_api:
                 self.btx_currencies.append(currency["Currency"])
         #print(self.btx_currencies)
 
-    def extract_coinMarketCu_coins(self):
+    def extract_coinMarketCup_coins(self, cap_usd, vol_usd):
         for currency in self.json_coinMarketCup:
             if currency['market_cap_usd'] is not None and currency['24h_volume_usd'] is not None:
-                if(float(currency['market_cap_usd']) > 50000000) or (float(currency['24h_volume_usd']) > 500000):
+                if(float(currency['market_cap_usd']) > cap_usd) or (float(currency['24h_volume_usd']) > vol_usd):
                     self.cmc_currencies.append(currency["symbol"])
         #print(self.cmc_currencies)
 
@@ -97,17 +97,17 @@ class bb_api:
         #print(len(self.merged_currencies))
 
 
-    def get_coins(self):
+    def get_coins(self, cap_usd, vol_usd):
         self.build_url_bitTrex_currencies()
         self.json_bitTrex_currencies = self.request(self.url_bitTrex_currencies)
         self.extract_bitTrex_coins()
         self.build_url_coinMarketCup()
         self.json_coinMarketCup = self.request(self.url_coinMarketCup)
-        self.extract_coinMarketCu_coins()
+        self.extract_coinMarketCup_coins(cap_usd, vol_usd)
         self.merge_coins()
 
-    def write_coins(self, path_to_coins):
-        self.get_coins()
+    def write_coins(self, path_to_coins, cap_usd, vol_usd):
+        self.get_coins(cap_usd, vol_usd)
         f = open(path_to_coins, 'w')
         f.writelines("%s\n" % i for i in self.merged_currencies)
         f.close()
@@ -119,17 +119,18 @@ class bb_api:
             #print(len(self.merged_currencies))
         return self.merged_currencies
 
-    def check_all_coins(self, path_to_coins):
+    def check_all_coins(self, path_to_coins, cap_usd, vol_usd):
         if(os.path.exists(path_to_coins)):
             #print("exists")
+            #print(time.time()-os.path.getmtime(path_to_coins))
             if(time.time()-os.path.getmtime(path_to_coins) > 86400):
-                #print("too old")
-                self.write_coins(path_to_coins)
+                print("too old")
+                self.write_coins(path_to_coins, cap_usd, vol_usd)
                 return self.read_coins(path_to_coins)
             else:
                 return self.read_coins(path_to_coins)
         else:
-            self.write_coins(path_to_coins)
+            self.write_coins(path_to_coins, cap_usd, vol_usd)
             return self.read_coins(path_to_coins)
 
 def main():

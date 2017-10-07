@@ -78,7 +78,7 @@ def main():
         if first_one: api = bb_api.bb_api(); math = bb_math.bb_math(); mail = bb_mail.bb_mail()
 
         #get all needed cryptocurrency
-        api.merged_currencies = api.check_all_coins('all_coins.txt')
+        api.merged_currencies = api.check_all_coins('all_coins.txt', config['min_Cap'], config['24hr_Vol'])
 
 
 
@@ -138,6 +138,7 @@ def main():
         #delay for 5 minutes
         time_after = time.time()
         delta_time = time_after - time_before
+        print(datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p"))
         print("delta_time is " + str(delta_time))
         sys.stdout.flush()
         first_one = False
