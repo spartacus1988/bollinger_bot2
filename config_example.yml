@@ -27,8 +27,11 @@ token: 123456789:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
 # Allowed user_id and chat_id. Only users from this list could get content.
+# 1)PROD
+# 2)DEBUG
 users:
-- -100chat_id
+- -1001133619325
+- -1001147695216
 
 
 

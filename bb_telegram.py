@@ -18,6 +18,7 @@ class bb_telegram():
         self.dp = self.updater.dispatcher
         self.dp.add_handler(CommandHandler("start", self.start))
         self.updater.start_polling()
+        self.msg_body = None
         #self.updater.idle()
 
 
@@ -42,9 +43,29 @@ class bb_telegram():
         return self.msg_body
 
 
-    def send(self):
-        self.dp.bot.send_message(chat_id=self.chat_id, text="I'm a bot, please talk to me!")
+    def send_message(self, cryptocurrency, rate, vol_24h):
+        if (cryptocurrency == 'BTC'):
+            self.msg_body = "Price for " + cryptocurrency + " currency is within a " + rate + " range.\n" \
+                            "https://www.coinigy.com/main/markets/BTRX/" + cryptocurrency + "/USD.\n" \
+                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
+                            "24hr Vol: " + vol_24h + "\n"
+        else:
+            self.msg_body = "Price for " + cryptocurrency + " currency is within a " + rate + " range.\n" \
+                            "https://www.coinigy.com/main/markets/BTRX/" + cryptocurrency + "/BTC.\n" \
+                            "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
+                            "24hr Vol: " + vol_24h + "\n"
+
+        self.dp.bot.send_message(chat_id=self.chat_id, text=self.msg_body)
         print("message was send")
+
+
+    def send_picture(self, cryptocurrency):
+        if cryptocurrency is not 'BTC':
+            filename = cryptocurrency + '_BTC.png'
+        else:
+            filename = 'BTC_USD.png'
+        self.dp.bot.sendDocument(chat_id=self.chat_id, document=open(filename, 'rb'))
+        print("picture was send")
 
 
 
@@ -60,9 +81,12 @@ def main():
     token = config['token']
     chat_id = config['users'][0]
     telegram = bb_telegram(token, chat_id)
-    telegram.send()
 
-    telegram.dp.bot.sendDocument(chat_id, document=open('fig_1.png', 'rb'))
+    telegram.send_message('ETH', 'selling', '999')
+    telegram.send_picture('BTC')
+
+    #telegram.dp.bot.send_message(chat_id, text="I'm a bot, please talk to me!")
+    #telegram.dp.bot.sendDocument(chat_id, document=open('fig_1.png', 'rb'))
 
 
 

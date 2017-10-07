@@ -5,6 +5,7 @@ import time
 import bb_api
 import bb_math
 import bb_mail
+import bb_telegram
 import logging
 import yaml
 
@@ -54,6 +55,20 @@ def send_handler(api, math, mail, config, cryptocurrency, rate):
 
     if (config['e-mailing_status']):
         mail.mail_send(config['msg_from'], config['msg_to'], cryptocurrency, math.input_dict.values()[-1:][0], rate, vol_24h)
+
+
+    if (config['telegram_status']):
+        token = config['token']
+
+        if (config['mode'] == 'PROD'):
+            chat_id = config['users'][2]
+        else:
+            chat_id = config['users'][2]
+
+        telegram = bb_telegram.bb_telegram(token, chat_id)
+
+        telegram.send_message(cryptocurrency, rate, vol_24h)
+        telegram.send_picture(cryptocurrency)
 
     if cryptocurrency is not 'BTC':
         try:
@@ -149,6 +164,12 @@ if __name__ == "__main__":
 
     logger = init_log()
     config = get_config('config.yml')
+
+    if len(sys.argv) > 1:
+        #print(format(sys.argv[1]))
+        config['mode'] = format(sys.argv[1])
+    else:
+        print("No args")
 
     if config['mode'] == 'DEBUG':
         main()

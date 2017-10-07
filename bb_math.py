@@ -77,7 +77,7 @@ class bb_math:
 
     def bb_plot(self, sort_Dict_price, sort_Dict_avg, sort_Dict_upp, sort_Dict_low, cryptocurrency):
         plt.grid()
-        my_labels = {"sort_Dict_price": "price_usd", "sort_Dict_avg": "mov_avg", "sort_Dict_upp": "upp_bbl", "sort_Dict_low": "low_bbl"}
+        my_labels = {"sort_Dict_price": "price", "sort_Dict_avg": "mov_avg", "sort_Dict_upp": "upp_bbl", "sort_Dict_low": "low_bbl"}
         dates_price = [dt.datetime.fromtimestamp(ts) for ts in sort_Dict_price.keys()]
         dates_last_point = [dt.datetime.fromtimestamp(ts) for ts in sort_Dict_upp.keys()]
 
