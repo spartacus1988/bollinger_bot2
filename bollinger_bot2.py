@@ -171,17 +171,13 @@ if __name__ == "__main__":
     else:
         print("No args")
 
-    if config['mode'] == 'DEBUG':
-        main()
 
-    elif  config['mode'] == 'PROD':
-
-      while True:
-          try:
+    while True:
+        try:
             main()
-          except Exception as error:
-              print(error)
-              print(datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p"))
-              logger.error(error)
-              sys.stdout.flush()
-              continue
+        except Exception as error:
+            print(error)
+            print(datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p"))
+            logger.error(error)
+            sys.stdout.flush()
+            continue
