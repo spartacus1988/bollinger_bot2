@@ -33,7 +33,7 @@ class bb_api:
 
     def build_url_crypto_compare(self, first, second, totime, limit):
         self.url_crypto_compare = "https://min-api.cryptocompare.com/data/histominute?fsym=" + first + "&tsym=" + second + "&toTs=" + totime + "&limit=" + str(limit) + "&e=BitTrex"
-
+        #self.url_crypto_compare = "https://min-api.cryptocompare.com/data/histohour?fsym=" + first + "&tsym=" + second + "&toTs=" + totime + "&limit=" + str(limit) + "&e=BitTrex"
 
     def build_url_addinfo(self, cryptocurrency):
         if cryptocurrency is not 'BTC':

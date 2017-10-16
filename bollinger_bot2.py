@@ -57,7 +57,7 @@ def send_handler(api, math, mail, config, cryptocurrency, rate):
         mail.mail_send(config['msg_from'], config['msg_to'], cryptocurrency, math.input_dict.values()[-1:][0], rate, vol_24h)
 
 
-    if (config['telegram_status']):
+    if (config['telegram_status']) and (float(vol_24h) > config['24hr_Vol_in_BTC']):
         token = config['token']
 
         if (config['mode'] == 'PROD'):
