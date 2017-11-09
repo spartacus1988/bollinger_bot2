@@ -57,17 +57,17 @@ def send_handler(api, math, mail, config, cryptocurrency, rate):
         mail.mail_send(config['msg_from'], config['msg_to'], cryptocurrency, math.input_dict.values()[-1:][0], rate, vol_24h)
 
 
-    if (config['telegram_status']) and (float(vol_24h) > config['24hr_Vol_in_BTC']):
+    if (config['telegram_status']):
         token = config['token']
 
         if (config['mode'] == 'PROD'):
-            chat_id = config['users'][2]
+            chat_id = config['users'][4]
         else:
-            chat_id = config['users'][2]
+            chat_id = config['users'][4]
 
         telegram = bb_telegram.bb_telegram(token, chat_id)
 
-        telegram.send_message(cryptocurrency, rate, vol_24h)
+        telegram.send_message(cryptocurrency, rate, vol_24h, math.upper_line, math.lower_line, math.input_dict.values()[-1:][0])
         telegram.send_picture(cryptocurrency)
 
     if cryptocurrency is not 'BTC':
@@ -93,61 +93,61 @@ def main():
         if first_one: api = bb_api.bb_api(); math = bb_math.bb_math(); mail = bb_mail.bb_mail()
 
         #get all needed cryptocurrency
-        api.merged_currencies = api.check_all_coins('all_coins.txt', config['min_Cap'], config['24hr_Vol'])
+        #api.merged_currencies = api.check_all_coins('all_coins.txt', config['min_Cap'], config['24hr_Vol'])
 
 
-
-        for cryptocurrency in api.merged_currencies:
+        cryptocurrency = 'BTC'
+        #for cryptocurrency in api.merged_currencies:
             #print(cryptocurrency)
-            if cryptocurrency is not 'BTC':
+            #if cryptocurrency is not 'BTC':
                 # get SortedDict({time:price}) from time_before
-                api.build_url_crypto_compare(cryptocurrency, 'BTC', str(int(time_before)), config['limit'])
+            #    api.build_url_crypto_compare(cryptocurrency, 'BTC', str(int(time_before)), config['limit'])
                 #print(api.url_crypto_compare)
-            else:
-                api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)), config['limit'])
+            #else:
+        api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)), config['limit'])
                 #print(api.url_crypto_compare)
 
 
 
-            api.json_crypto_compare = api.request(api.url_crypto_compare)
-            temp_result = api.extract_crypto_compare()
+        api.json_crypto_compare = api.request(api.url_crypto_compare)
+        temp_result = api.extract_crypto_compare()
 
             #print(temp_result)
 
-            if len(temp_result.keys()) != 0:
+        if len(temp_result.keys()) != 0:
 
-                #get input_dict for math
-                math.input_dict = temp_result
+            #get input_dict for math
+            math.input_dict = temp_result
 
-                #calculating mov_avg
-                math.running_avg = math.moving_average_FOUR(math.input_dict, config['num_avg'])
+            #calculating mov_avg
+            math.running_avg = math.moving_average_FOUR(math.input_dict, config['num_avg'])
 
-                #calculating std
-                math.std_value = math.bb_std(math.input_dict)
-                print('math.std_value is ')
-                print(math.std_value)
-                sys.stdout.flush()
+            #calculating std
+            math.std_value = math.bb_std(math.input_dict)
+            print('math.std_value for ' + cryptocurrency + ' is %f' % math.std_value)
+            #print(math.std_value)
+            sys.stdout.flush()
 
-                #calculating upper_line
-                #print(math.running_avg)
-                math.upper_line = math.bb_upper_line()
+            #calculating upper_line
+            #print(math.running_avg)
+            math.upper_line = math.bb_upper_line()
 
-                #calculating lower_line
-                math.lower_line = math.bb_lower_line()
+            #calculating lower_line
+            math.lower_line = math.bb_lower_line()
 
 
-                #print("debug")
-                #send_handler(api, math, mail, config, cryptocurrency, 'debug')
+            #print("debug")
+            #send_handler(api, math, mail, config, cryptocurrency, 'debug')
 
-                #SIGNAL to BUY
-                if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
-                    print("BUY " + cryptocurrency)
-                    send_handler(api, math, mail, config, cryptocurrency, 'buying')
+            #SIGNAL to BUY
+            if (math.bb_compare_to_buy(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
+                print("BUY " + cryptocurrency)
+                send_handler(api, math, mail, config, cryptocurrency, 'buying')
 
-                #SIGNAL to SELL
-                if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
-                    print("SELL " + cryptocurrency)
-                    send_handler(api, math, mail, config, cryptocurrency, 'selling')
+            #SIGNAL to SELL
+            if (math.bb_compare_to_sell(math.input_dict.values()[-1:][0], math.lower_line.values()[-1:][0],math.upper_line.values()[-1:][0], config['percent'])) and (math.std_value > 0):
+                print("SELL " + cryptocurrency)
+                send_handler(api, math, mail, config, cryptocurrency, 'selling')
 
 
         #delay for 5 minutes

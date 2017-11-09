@@ -35,6 +35,7 @@ class bb_api:
         self.url_crypto_compare = "https://min-api.cryptocompare.com/data/histominute?fsym=" + first + "&tsym=" + second + "&toTs=" + totime + "&limit=" + str(limit) + "&e=BitTrex"
         #self.url_crypto_compare = "https://min-api.cryptocompare.com/data/histohour?fsym=" + first + "&tsym=" + second + "&toTs=" + totime + "&limit=" + str(limit) + "&e=BitTrex"
 
+
     def build_url_addinfo(self, cryptocurrency):
         if cryptocurrency is not 'BTC':
             self.url_addinfo = "https://www.cryptocompare.com/api/data/coinsnapshot/?fsym=" + cryptocurrency + "&tsym=BTC"
@@ -84,7 +85,7 @@ class bb_api:
         for item in self.json_addinfo["Data"]["Exchanges"]:
             if item['MARKET'] == 'BitTrex':
                 #print(item['VOLUME24HOUR'])
-                return item['VOLUME24HOUR']
+                return item['VOLUME24HOURTO']
 
 
     def merge_coins(self):

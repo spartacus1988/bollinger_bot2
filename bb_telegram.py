@@ -43,19 +43,26 @@ class bb_telegram():
         return self.msg_body
 
 
-    def send_message(self, cryptocurrency, rate, vol_24h):
+    def send_message(self, cryptocurrency, rate, vol_24h, upper_line, lower_line,  price):
         if (cryptocurrency == 'BTC'):
-            self.msg_body = "Price for " + cryptocurrency + " currency is within a " + rate + " range.\n" \
+            self.msg_body = "Price for " + cryptocurrency + " currency is within a " + rate.upper() + " range.\n" \
                             "https://www.coinigy.com/main/markets/BTRX/" + cryptocurrency + "/USD.\n" \
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
+                            "Price: " + price + "\n" \
+                            "Upper: " + upper_line + "\n"\
+                            "Lower: " + lower_line + "\n"\
                             "24hr Vol: " + vol_24h + "\n"
         else:
-            self.msg_body = "Price for " + cryptocurrency + " currency is within a " + rate + " range.\n" \
-                            "https://www.coinigy.com/main/markets/BTRX/" + cryptocurrency + "/BTC.\n" \
+            self.msg_body = "Price for " + cryptocurrency + " is %f" % price + " and is currency within a " + rate.upper() + " range.\n" \
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
-                            "24hr Vol: " + vol_24h + "\n"
+                            "24hr Vol (BTC): " + vol_24h + "\n" \
+                            "Price: " + price + "\n" \
+                            "Upper: " + upper_line + "\n" \
+                            "Lower: " + lower_line + "\n" \
+                            "24hr Vol: " + vol_24h + "\n" \
+                            "https://www.coinigy.com/main/markets/BTRX/" + cryptocurrency + "/BTC"
 
-        self.dp.bot.send_message(chat_id=self.chat_id, text=self.msg_body)
+        self.dp.bot.send_message(chat_id=self.chat_id, text=self.msg_body, disable_web_page_preview="true" )
         print("message was send")
 
 
@@ -75,14 +82,14 @@ def main():
         with open('config.yml', 'r') as ymlfile:
             config = yaml.load(ymlfile)
     except BaseException:
-        print(path_to_config + " file is not exists! Please create it first.")
+        #print(path_to_config + " file is not exists! Please create it first.")
         sys.exit()
 
     token = config['token']
     chat_id = config['users'][0]
     telegram = bb_telegram(token, chat_id)
 
-    telegram.send_message('ETH', 'selling', '999')
+    telegram.send_message('ETH', 'selling', '999', 2.4)
     telegram.send_picture('BTC')
 
     #telegram.dp.bot.send_message(chat_id, text="I'm a bot, please talk to me!")

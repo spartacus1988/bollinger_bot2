@@ -64,13 +64,25 @@ class bb_math:
         return self.lower_line
 
     def bb_compare_to_buy(self, curPrice, lower_line, upper_line, percent):
-        if ((curPrice < (lower_line + ((upper_line - lower_line) * percent * 0.01)))):
+        #if ((curPrice < (lower_line + ((upper_line - lower_line) * percent * 0.01)))):
+        print("curPrice is " + str(curPrice))
+        print("lower_line is " + str(lower_line))
+        print("upper_line is " + str(upper_line))
+        print("percent is " + str(percent))
+        print("(lower_line + ((upper_line - lower_line) * percent * 0.01)) is " + str(lower_line + ((upper_line - lower_line) * percent * 0.01)))
+        if (curPrice < lower_line):
             return True
         else:
             return False
 
     def bb_compare_to_sell(self, curPrice, lower_line, upper_line, percent):
-        if ((curPrice > (upper_line - ((upper_line - lower_line) * percent * 0.01)))):
+        #if (curPrice > (upper_line - ((upper_line - lower_line) * percent * 0.01)))):
+        print("curPrice is " + str(curPrice))
+        print("lower_line is " + str(lower_line))
+        print("upper_line is " + str(upper_line))
+        print("percent is " + str(percent))
+        print("(upper_line - ((upper_line - lower_line) * percent * 0.01)) is " + str(upper_line - ((upper_line - lower_line) * percent * 0.01)))
+        if (curPrice > upper_line):
             return True
         else:
             return False
@@ -93,7 +105,7 @@ class bb_math:
         scat4 = plt.plot(dates_last_point, sort_Dict_low.values(), color='green', marker='o', linestyle='--', label=my_labels["sort_Dict_low"])
 
         plt.legend(loc='best')
-        #plt.show()
+        plt.show()
 
         if cryptocurrency is not 'BTC':
             filename = cryptocurrency + '_BTC.png'
@@ -106,7 +118,7 @@ class bb_math:
 
         filename_without_extension = filename.split('.')[0]
 
-        plt.savefig(filename_without_extension)
+        plt.savefig(filename_without_extension) #LB - Disabled saving the file.
 
         #plt.savefig("fig_1")
         plt.clf()
