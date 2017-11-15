@@ -70,7 +70,11 @@ class bb_math:
         MF_neg = sum((float(MF_lst_neg[i]) for i in range(0, int(len(MF_lst_neg)))))
         #print("MF_neg is " + str(MF_neg))
 
-        money_ratio = MF_pos / MF_neg
+        
+        if (MF_neg > 0) or (MF_neg < 0):
+            money_ratio = MF_pos / MF_neg
+        else:
+            money_ratio = 0
         #print("money_ratio is " + str(money_ratio))
 
         MFI = 100 - (100 / (1 + money_ratio))
