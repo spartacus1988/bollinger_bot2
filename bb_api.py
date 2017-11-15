@@ -18,6 +18,9 @@ class bb_api:
         self.cmc_currencies = []
         self.merged_currencies = set()
         self.prices = {}
+        self.typical_prices = {}
+        self.MF_dict = {}
+
 
         self.url_crypto_compare = None
         self.url_bitTrex_currencies = None
@@ -81,11 +84,40 @@ class bb_api:
         self.prices = SortedDict(self.prices)
         return self.prices
 
+    def extract_typical_prices(self):
+        self.typical_prices = {}
+        for item in self.json_crypto_compare["Data"]:
+            if item['close'] is not None:
+                typical_price = (item['high'] + item['low'] + item['close']) / 3
+                time_st = item['time']
+                self.typical_prices[time_st] = typical_price
+        self.typical_prices = SortedDict(self.typical_prices)
+        return self.typical_prices
+
+
     def extract_addinfo(self):
         for item in self.json_addinfo["Data"]["Exchanges"]:
             if item['MARKET'] == 'BitTrex':
                 #print(item['VOLUME24HOUR'])
                 return item['VOLUME24HOURTO']
+
+    def MF_extract(self):
+        self.MF_dict = {}
+        for item in self.json_crypto_compare["Data"]:
+            # print("json_crypto_compare")
+            # print(self.json_crypto_compare["Data"])
+            if item['close'] is not None:
+                typical_price = (item['high'] + item['low'] + item['close'])/3
+                #print("typical_price is " + str(typical_price))
+                money_flow = typical_price * item['volumeto']
+                #print("volumeto is " + str(item['volumeto']))
+                #print("money_flow is " + str(money_flow))
+                #################################################################
+                time_st = item['time']
+                self.MF_dict[time_st] = money_flow
+        self.MF_dict = SortedDict(self.MF_dict)
+        return self.MF_dict
+
 
 
     def merge_coins(self):
