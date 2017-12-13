@@ -47,7 +47,9 @@ def get_config(path_to_config):
 
 def send_handler(api, math, mail, config, cryptocurrency, rate):
 
-    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, cryptocurrency)
+    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, cryptocurrency
+
+
 
     api.build_url_addinfo(cryptocurrency)
     api.json_addinfo = api.request(api.url_addinfo)
@@ -96,12 +98,12 @@ def main():
         #api.merged_currencies = api.check_all_coins('all_coins.txt', config['min_Cap'], config['24hr_Vol'])
 
 
-        cryptocurrency = 'BTC'
-        #for cryptocurrency in api.merged_currencies:
+        #cryptocurrency = 'BTC'
+        for cryptocurrency in api.merged_currencies:
             #print(cryptocurrency)
-            #if cryptocurrency is not 'BTC':
-                # get SortedDict({time:price}) from time_before
-            #    api.build_url_crypto_compare(cryptocurrency, 'BTC', str(int(time_before)), config['limit'])
+            if cryptocurrency is not 'BTC':
+                #get SortedDict({time:price}) from time_before
+                api.build_url_crypto_compare(cryptocurrency, 'BTC', str(int(time_before)), config['limit'])
                 #print(api.url_crypto_compare)
             #else:
         api.build_url_crypto_compare('BTC', 'USD', str(int(time_before)), config['limit'])
