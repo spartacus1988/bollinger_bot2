@@ -47,7 +47,7 @@ def get_config(path_to_config):
 
 def send_handler(api, math, mail, config, cryptocurrency, rate):
 
-    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, cryptocurrency
+    math.bb_plot(math.input_dict, math.running_avg, math.upper_line, math.lower_line, cryptocurrency)
 
 
 
