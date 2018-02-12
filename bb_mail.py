@@ -25,14 +25,12 @@ class bb_mail:
     def create_msg_body(self, sym, rate, vol_24h):
         if (sym == 'BTC'):
             self.msg_body = "Price for " + sym + " currency is within a " + rate + " range.\n" \
-                            "https://www.coinigy.com/main/markets/BTRX/" + sym + "/USD.\n" \
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
                             "24hr Vol: " + vol_24h + "\n"
 
 
         else:
             self.msg_body = "Price for " + sym + " currency is within a " + rate + " range.\n" \
-                            "https://www.coinigy.com/main/markets/BTRX/" + sym + "/BTC.\n" \
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
                              "24hr Vol: " + vol_24h + "\n"
 

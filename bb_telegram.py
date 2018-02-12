@@ -33,12 +33,10 @@ class bb_telegram():
         if (currency == 'BTC'):
             self.msg_body = "Price Alert (BTRX " + currency + "/USD @ " + str(last_price) + ")\n" \
                             "Price for " + currency + " currency is within a " + rate + " range.\n" \
-                            "https://www.coinigy.com/main/markets/BTRX/" + currency + "/USD.\n" \
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"
         else:
             self.msg_body = "Price Alert (BTRX " + currency + "/BTC @ " + str(last_price) + ")\n" \
                             "Price for " + currency + " currency is within a " + rate + " range.\n" \
-                            "https://www.coinigy.com/main/markets/BTRX/" + currency + "/BTC.\n" \
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n"
         return self.msg_body
 
@@ -46,7 +44,6 @@ class bb_telegram():
     def send_message(self, cryptocurrency, rate, vol_24h, upper_line, lower_line,  price, MFI, MACD_delta):
         if (cryptocurrency == 'BTC'):
             self.msg_body = "Price for " + cryptocurrency + " currency is within a " + rate.upper() + " range.\n" \
-                            "https://www.coinigy.com/main/markets/BTRX/" + cryptocurrency + "/USD.\n" \
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
                             "Price: " + str(price) + "\n" \
                             "Upper: " + str(upper_line.values()[0]) + "\n"\
@@ -56,7 +53,6 @@ class bb_telegram():
                             "MACD_delta: " + str(MACD_delta) + "\n"
         else:
             self.msg_body = "Price for " + cryptocurrency + " is %f" % price + " and is currency within a " + rate.upper() + " range.\n" \
-                            "https://www.coinigy.com/main/markets/BTRX/" + cryptocurrency + "/BTC.\n"\
                             "Timestamp: " + datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p") + "\n" \
                             "24hr Vol (BTC): " + vol_24h + "\n" \
                             "Price: " + str(price) + "\n" \
